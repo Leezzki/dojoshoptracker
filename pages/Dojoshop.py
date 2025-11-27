@@ -181,6 +181,16 @@ with col2:
     )
 
 
+import pandas as pd
+
+st.markdown("---")
+st.markdown("### 🧾 Recent purchases (from CSV)")
+
+try:
+    log_df = pd.read_csv("purchase_log.csv")
+    st.dataframe(log_df, use_container_width=True, height=300)
+except FileNotFoundError:
+    st.info("No purchase_log.csv file found yet.")
 
 
 
