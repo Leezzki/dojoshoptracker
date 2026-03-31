@@ -1,7 +1,7 @@
 import streamlit as st
 from pages.save_dojoshop import save_items
 
-save_items(st.session_state.data_table)
+
 
 st.title("Admin Panel")
 st.subheader("Restock")
@@ -28,13 +28,15 @@ restock_number = st.number_input(
 
 if st.button("Add Stock"):
     if restock_item is None:
-      st.warning("Please choose an item first.")
+        st.warning("Please choose an item first.")
     else:  
-      for item in st.session_state.data_table:  
-        if item["name"] == restock_item:
-          item["current_stock"] += restock_number
-          st.success(f"You have added {restock_number} {restock_item}")
-          break
+        for item in st.session_state.data_table:  
+            if item["name"] == restock_item:
+                item["current_stock"] += int(restock_number)
+                save_items(st.session_state.data_table)
+                st.success(f"You have added {restock_number} {restock_item}")
+                st.rerun()
+                break
 
 # Price section 
 st.subheader("Change Price")
@@ -51,10 +53,13 @@ new_price = st.number_input(
 
 # Price section updating price
 if st.button("Update Price"):
-  for item in st.session_state.data_table:
-    if item["name"] == item_price_select:
-      item["price"] = new_price
-      st.success(f"You have changed the price of {item_price_select} to {new_price}")
+    for item in st.session_state.data_table:
+        if item["name"] == item_price_select:
+            item["price"] = int(new_price)
+            save_items(st.session_state.data_table)
+            st.success(f"You have changed the price of {item_price_select} to {new_price}")
+            st.rerun()
+            break
 
 # New item section 
 
@@ -64,8 +69,15 @@ new_item_stock = st.number_input("Stock", min_value=0, step=1, key="placeholdder
 
 # Stock section adding new item
 if st.button("Add item"):
-  st.session_state.data_table.append({"name": new_item, "price": new_item_price, "initial_stock": new_item_stock, "current_stock": new_item_stock})
-  st.success(f"You have added {new_item_stock} {new_item}")
+    st.session_state.data_table.append({
+        "name": new_item,
+        "price": int(new_item_price),
+        "initial_stock": int(new_item_stock),
+        "current_stock": int(new_item_stock)
+    })
+    save_items(st.session_state.data_table)
+    st.success(f"You have added {new_item_stock} {new_item}")
+    st.rerun()
 
 if st.button("Restore Multicolored Pen"):
     st.session_state.data_table.insert(0, {
@@ -86,4 +98,6 @@ if st.button("Delete item"):
         item for item in st.session_state.data_table
         if item["name"] != item_to_delete
     ]
+    save_items(st.session_state.data_table)
     st.success(f"Deleted {item_to_delete}")
+    st.rerun()
