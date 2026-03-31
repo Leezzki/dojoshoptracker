@@ -10,7 +10,7 @@ st.set_page_config(
 
 
 data_table = load_items()
-save_items(data_table)
+
 
 
 admin_view = st.Page(
