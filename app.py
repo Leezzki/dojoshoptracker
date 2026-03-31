@@ -9,8 +9,8 @@ st.set_page_config(
 )
 
 
-data_table = load_items()
-
+if "data_table" not in st.session_state:
+    st.session_state.data_table = load_items()
 
 
 admin_view = st.Page(
