@@ -1,7 +1,9 @@
 import streamlit as st
 from pages.save_dojoshop import save_items
 
-
+if "admin_message" in st.session_state:
+    st.success(st.session_state.admin_message)
+    del st.session_state.admin_message
 
 st.title("Admin Panel")
 st.subheader("Restock")
@@ -29,12 +31,12 @@ restock_number = st.number_input(
 if st.button("Add Stock"):
     if restock_item is None:
         st.warning("Please choose an item first.")
-    else:  
-        for item in st.session_state.data_table:  
+    else:
+        for item in st.session_state.data_table:
             if item["name"] == restock_item:
                 item["current_stock"] += int(restock_number)
                 save_items(st.session_state.data_table)
-                st.success(f"You have added {restock_number} {restock_item}")
+                st.session_state.admin_message = f"You have added {restock_number} {restock_item}"
                 st.rerun()
                 break
 
