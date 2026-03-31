@@ -1,5 +1,7 @@
 import streamlit as st
+from pages.save_dojoshop import save_items
 
+save_items(st.session_state.data_table)
 
 st.title("Admin Panel")
 st.subheader("Restock")
