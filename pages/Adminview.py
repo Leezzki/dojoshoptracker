@@ -101,3 +101,5 @@ if st.button("Delete item"):
     save_items(st.session_state.data_table)
     st.success(f"Deleted {item_to_delete}")
     st.rerun()
+
+save_items(st.session_state.data_table)
