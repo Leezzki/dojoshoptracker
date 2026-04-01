@@ -1,14 +1,23 @@
 import csv
+from pathlib import Path
 
-def save_items(items, filename="items.csv"):
+BASE_DIR = Path(__file__).resolve().parent.parent
+ITEMS_FILE = BASE_DIR / "items.csv"
+PURCHASE_LOG_FILE = BASE_DIR / "purchase_log.csv"
+
+def save_items(items):
     fieldnames = ["name", "price", "initial_stock", "current_stock"]
-    with open(filename, "w", newline="", encoding="utf-8") as file:
+    with open(ITEMS_FILE, "w", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(items)
 
-def append_purchase(purchase, filename="purchase_log.csv"):
+def append_purchase(purchase):
     fieldnames = ["timestamp", "year_group", "item_name", "quantity", "price", "total_cost"]
-    with open(filename, "a", newline="", encoding="utf-8") as file:
+    file_exists = PURCHASE_LOG_FILE.exists()
+
+    with open(PURCHASE_LOG_FILE, "a", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
+        if not file_exists:
+            writer.writeheader()
         writer.writerow(purchase)
